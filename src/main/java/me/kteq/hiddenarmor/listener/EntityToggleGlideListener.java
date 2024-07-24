@@ -22,10 +22,10 @@ public class EntityToggleGlideListener implements Listener {
 
     @EventHandler
     public void onPlayerToggleGlide(EntityToggleGlideEvent e){
-        if(!(e.getEntity() instanceof Player)) return;
-
-        Player player = (Player) e.getEntity();
-        if(!hiddenArmorManager.isArmorHidden(player)) return;
+        if(!(e.getEntity() instanceof Player player))
+            return;
+        if(!hiddenArmorManager.isArmorHidden(player))
+            return;
 
         new BukkitRunnable(){
             @Override

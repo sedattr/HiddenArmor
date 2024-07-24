@@ -2,6 +2,13 @@
 # | HiddenArmor - Configuration File  |
 # +- - - - - - - - - - - - - - - - - -+
 
+mysql:
+  table: "ha_players"
+  link: "com.mysql.jdbc.Driver"
+  url: "url"
+  user: "user"
+  password: "pass"
+
 # Invisibility potion effect related section
 invisibility-potion:
   # If players with the invisibility potion effect should always have their gear invisible as well.

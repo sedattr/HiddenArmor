@@ -24,23 +24,25 @@ public class InventoryShiftClickListener implements Listener {
     }
 
     @EventHandler
-    public void onShiftClickArmor(InventoryClickEvent event){
-        if(!hiddenArmorManager.isArmorHidden((Player) event.getWhoClicked())) return;
-        if(!(event.getClickedInventory() instanceof PlayerInventory)) return;
-        if(!event.isShiftClick()) return;
+    public void onShiftClickArmor(InventoryClickEvent event) {
+        if (!hiddenArmorManager.isArmorHidden((Player) event.getWhoClicked()))
+            return;
+        if (!(event.getClickedInventory() instanceof PlayerInventory))
+            return;
+        if (!event.isShiftClick())
+            return;
 
         Player player = (Player) event.getWhoClicked();
         PlayerInventory inv = player.getInventory();
         ItemStack armor = event.getCurrentItem();
 
-        if(player == null) return;
-        if(inv == null) return;
-        if(armor == null) return;
+        if (player == null || inv == null || armor == null)
+            return;
 
-        if((armor.getType().toString().endsWith("_HELMET") && inv.getHelmet() == null) ||
+        if ((armor.getType().toString().endsWith("_HELMET") && inv.getHelmet() == null) ||
                 ((armor.getType().toString().endsWith("_CHESTPLATE") || armor.getType().equals(Material.ELYTRA)) && inv.getChestplate() == null) ||
                 (armor.getType().toString().endsWith("_LEGGINGS") && inv.getLeggings() == null) ||
-                (armor.getType().toString().endsWith("_BOOTS") && inv.getBoots() == null)){
+                (armor.getType().toString().endsWith("_BOOTS") && inv.getBoots() == null)) {
             new BukkitRunnable(){
                 @Override
                 public void run() {

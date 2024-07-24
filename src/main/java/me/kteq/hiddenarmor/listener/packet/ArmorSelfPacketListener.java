@@ -13,7 +13,6 @@ import me.kteq.hiddenarmor.manager.HiddenArmorManager;
 
 import me.kteq.hiddenarmor.util.ItemUtil;
 import me.kteq.hiddenarmor.util.StrUtil;
-import org.apache.commons.lang.WordUtils;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -155,7 +154,7 @@ public class ArmorSelfPacketListener {
     private String getPieceName(ItemStack itemStack){
         String name = itemStack.getType().toString();
         name = name.replaceAll("_", " ");
-        name = WordUtils.capitalizeFully(name);
+
         if(itemStack.getItemMeta().hasDisplayName())
             name = itemStack.getItemMeta().getDisplayName() + StrUtil.color(" &r&8(") + name + ")";
         else

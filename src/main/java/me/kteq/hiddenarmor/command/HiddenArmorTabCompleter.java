@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HiddenArmorTabCompleter implements TabCompleter {
-    private Plugin plugin;
+    private final Plugin plugin;
 
     public HiddenArmorTabCompleter(Plugin plugin) {
         this.plugin = plugin;

@@ -62,16 +62,18 @@ public final class HiddenArmor extends JavaPlugin {
         getCommand("hiddenarmor").setTabCompleter(new HiddenArmorTabCompleter(this));
 
         // Metrics
-        Metrics metrics = new Metrics(this, 14419);
+        new Metrics(this, 14419);
     }
 
     @Override
     public void onDisable() {
-        hiddenArmorManager.saveCurrentEnabledPlayers();
+        hiddenArmorManager.shutdown();
     }
 
     private void checkConfig() {
-        if(getConfig().getInt("config-version") >= getConfig().getDefaults().getInt("config-version")) return;
+        if (getConfig().getInt("config-version") >= getConfig().getDefaults().getInt("config-version"))
+            return;
+
         getLogger().log(Level.WARNING, "Your HiddenArmor configuration file is outdated!");
         getLogger().log(Level.WARNING, "Please regenerate the 'config.yml' file when possible.");
     }
