@@ -7,11 +7,8 @@ import me.kteq.hiddenarmor.command.HiddenArmorCommand;
 import me.kteq.hiddenarmor.command.ToggleArmorCommand;
 import me.kteq.hiddenarmor.handler.ArmorPacketHandler;
 import me.kteq.hiddenarmor.handler.MessageHandler;
+import me.kteq.hiddenarmor.listener.*;
 import me.kteq.hiddenarmor.util.Metrics;
-import me.kteq.hiddenarmor.listener.EntityToggleGlideListener;
-import me.kteq.hiddenarmor.listener.GameModeListener;
-import me.kteq.hiddenarmor.listener.PotionEffectListener;
-import me.kteq.hiddenarmor.listener.InventoryShiftClickListener;
 import me.kteq.hiddenarmor.listener.packet.ArmorOthersPacketListener;
 import me.kteq.hiddenarmor.listener.packet.ArmorSelfPacketListener;
 import me.kteq.hiddenarmor.manager.HiddenArmorManager;
@@ -54,6 +51,7 @@ public final class HiddenArmor extends JavaPlugin {
         new ArmorOthersPacketListener(this, protocolManager);
 
         // Register event listeners
+        new PlayerListeners(this);
         new InventoryShiftClickListener(this);
         new GameModeListener(this);
         new PotionEffectListener(this);

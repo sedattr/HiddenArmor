@@ -18,7 +18,7 @@ public class HiddenArmorManager {
     private Connection connection;
     private final HiddenArmor plugin;
 
-    private Set<UUID> enabledPlayersUUID = new HashSet<>();
+    private final Set<UUID> enabledPlayersUUID = new HashSet<>();
     private final Set<Predicate<Player>> forceDisablePredicates = new HashSet<>();
     private final Set<Predicate<Player>> forceEnablePredicates = new HashSet<>();
 
@@ -90,15 +90,19 @@ public class HiddenArmorManager {
             x.printStackTrace();
         }
 
-        loadEnabledPlayers();
+        for (Player player : Bukkit.getOnlinePlayers())
+            loadPlayer(player);
+    }
+
+    public void removeUUID(UUID uuid) {
+        this.enabledPlayersUUID.remove(uuid);
     }
 
     public void togglePlayer(Player player, boolean inform) {
-        if (isEnabled(player)) {
+        if (isEnabled(player))
             disablePlayer(player, inform);
-        } else {
+        else
             enablePlayer(player, inform);
-        }
     }
 
     public void enablePlayer(Player player, boolean inform) {
@@ -185,58 +189,20 @@ public class HiddenArmorManager {
         });
     }
 
-    // tabledeki butun uuidleri silmek icin herhangi bir kod yoktu sadece table sil geri olusturma vardi
-    // bu da kotu fikir oldugu icin tek tek save/delete sistemine cevirdim
-    // bu da hepsini saveleme ama drop statement hatali
-    /*
-    public void saveCurrentEnabledPlayers() {
-        List<String> enabledUUIDs = this.enabledPlayersUUID.stream().map(UUID::toString).toList();
-
-        String drop = "ALTER TABLE " + TABLE_NAME + " DROP COLUMN *";
-        String add = "REPLACE INTO " + TABLE_NAME + " (uuid) VALUES (?)";
-
+    public void loadPlayer(Player player) {
+        String sql = "SELECT * FROM " + TABLE_NAME + " WHERE uuid = ?";
         Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
             try (
-                    PreparedStatement statement = getConnection().prepareStatement(drop)
+                    PreparedStatement statement = getConnection().prepareStatement(sql)
             ) {
-                statement.execute();
-            } catch (SQLException x) {
-                plugin.getLogger().log(Level.WARNING, "Could not drop columns", x);
-            }
-
-            for (String enabledUUID : enabledUUIDs) {
-                try (
-                        PreparedStatement statement = getConnection().prepareStatement(add)
-                ) {
-                    statement.setString(1, enabledUUID);
-
-                    statement.execute();
-                } catch (SQLException x) {
-                    plugin.getLogger().log(Level.WARNING, "Could not save enabled players to database", x);
-                }
-            }
-        });
-    }
-    */
-
-    private void loadEnabledPlayers() {
-        String sql = "SELECT * FROM " + TABLE_NAME;
-
-        Set<UUID> uuid = new HashSet<>();
-        Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
-            try (
-                    PreparedStatement statement = getConnection().prepareStatement(sql);
-            ) {
+                statement.setString(1, player.getUniqueId().toString());
                 ResultSet set = statement.executeQuery();
 
-                while (set.next()) {
-                    uuid.add(UUID.fromString(set.getString("uuid")));
-                }
+                if (set.next())
+                    enablePlayer(player, false);
             } catch (SQLException x) {
-                plugin.getLogger().log(Level.WARNING, "Could not load enabled players from database", x);
+                plugin.getLogger().log(Level.WARNING, "Could not load player " + player.getUniqueId(), x);
             }
         });
-
-        this.enabledPlayersUUID = uuid;
     }
 }
